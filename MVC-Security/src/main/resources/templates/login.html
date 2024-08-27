@@ -10,6 +10,17 @@
 <body>
     
     <form th:action="@{/authenticateTheUser}" class="w-50" method="POST">
+        <!--
+        th:if="${param.error}" là thuộc tính của thymeleaf sử dụng để kiểm tra
+        điều kiện. Ở đây, Thymeleaf sẽ kiểm tra xem trong các tham số URL có tồn
+        tại tham số error hay không. Nếu có, điều kiện đúng và nội dung bên trong
+        sẽ được hiển thị
+        -->
+        <div th:if="${param.error}">
+            <span style="color: red">
+                Đăng nhập thất bại, vui lòng kiểm tra lại tài khoản và mật khẩu
+            </span>
+        </div>
         <!-- Email input -->
         <div data-mdb-input-init class="form-outline mb-4">
           <input type="text" name="username" id="form2Example1" class="form-control" />
