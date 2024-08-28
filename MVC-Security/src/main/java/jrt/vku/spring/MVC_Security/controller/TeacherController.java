@@ -1,15 +1,17 @@
 package jrt.vku.spring.MVC_Security.controller;
 
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/showLoginPage")
-public class LoginController {
-	
-	@GetMapping("")
-	public String showLoginPage() {
-		return "login";
+@RequestMapping("/teacher")
+public class TeacherController {
+
+	@GetMapping()
+	public String showHomePage(Model model) {
+		return "teacher/home";
 	}
 }

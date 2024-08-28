@@ -1,42 +1,91 @@
-Hàm `securityFilterChain` trong Spring Security được sử dụng để cấu hình bảo mật cho ứng dụng web của bạn. Dưới đây là giải thích chi tiết và dễ hiểu về hàm này:
+### Hàm `securityFilterChain`:
 
-### 1. Khai báo hàm với `@Bean`
 ```java
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(
+        configurer -> configurer
+            .requestMatchers("/public/**").permitAll()
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+            .requestMatchers("/teacher/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+            .anyRequest().permitAll()
+    )
+    .formLogin(
+        form -> form
+            .loginPage("/showLoginPage")
+            .loginProcessingUrl("/authenticateTheUser")
+            .defaultSuccessUrl("/home", true)
+            .permitAll()
+    )
+    .logout(
+        logout -> logout.permitAll()
+    )
+    .exceptionHandling(
+        configurer -> configurer.accessDeniedPage("/showPage403")
+    );
+    return http.build();
+}
 ```
-- Hàm này được đánh dấu với `@Bean`, nghĩa là nó sẽ trả về một đối tượng được quản lý bởi Spring Container, trong trường hợp này là `SecurityFilterChain`.
-- `HttpSecurity` là một đối tượng cung cấp các phương thức để cấu hình bảo mật cho các yêu cầu HTTP.
 
-### 2. Cấu hình bảo mật cho các yêu cầu HTTP
-```java
-http.authorizeHttpRequests(
-        configurer -> configurer.anyRequest().authenticated()
-);
-```
-- Đoạn này sử dụng `HttpSecurity` để cấu hình bảo mật.
-- `authorizeHttpRequests` thiết lập các quy tắc bảo mật cho các yêu cầu HTTP.
-- `configurer -> configurer.anyRequest().authenticated()`:
-    - `anyRequest().authenticated()`: Bất kỳ yêu cầu nào cũng phải được xác thực, tức là người dùng phải đăng nhập thì mới có thể truy cập vào bất kỳ trang nào của ứng dụng.
+### Giải thích chi tiết:
 
-### 3. Cấu hình trang đăng nhập
-```java
-.formLogin(
-        form -> form.loginPage("/showLoginPage")
-                .loginProcessingUrl("/authenticateTheUser")
-                .permitAll()
-)
-```
-- `formLogin` cấu hình xác thực dựa trên form đăng nhập.
-- `form -> form.loginPage("/showLoginPage")`: Chỉ định trang đăng nhập tùy chỉnh. Khi người dùng truy cập vào một trang yêu cầu xác thực mà chưa đăng nhập, họ sẽ được chuyển hướng đến trang `/showLoginPage`.
-- `loginProcessingUrl("/authenticateTheUser")`: Đường dẫn mà Spring Security sẽ xử lý việc đăng nhập (khi người dùng gửi form đăng nhập).
-- `permitAll()`: Cho phép tất cả mọi người (bao gồm cả người chưa đăng nhập) có thể truy cập vào trang đăng nhập này.
+1. **@Bean**:
+    - Chú thích này cho Spring biết rằng hàm `securityFilterChain` sẽ tạo ra một bean của loại `SecurityFilterChain`, mà Spring sẽ quản lý.
 
-### Kết quả tổng quát
-Khi hàm này được thực thi:
-- Mọi yêu cầu đến ứng dụng đều yêu cầu người dùng phải đăng nhập.
-- Nếu người dùng chưa đăng nhập và truy cập vào một trang yêu cầu xác thực, họ sẽ được chuyển hướng đến trang `/showLoginPage`.
-- Sau khi người dùng nhập thông tin đăng nhập và gửi form, yêu cầu này sẽ được xử lý tại `/authenticateTheUser`.
+2. **public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception**:
+    - Đây là khai báo của hàm. `HttpSecurity` là đối tượng mà bạn sử dụng để cấu hình bảo mật cho ứng dụng. Hàm này có thể ném ra ngoại lệ `Exception`, do đó bạn cần xử lý hoặc khai báo rằng nó có thể ném ngoại lệ.
 
-### Ví dụ thực tế
-Giả sử bạn có một ứng dụng quản lý sinh viên. Bạn muốn đảm bảo rằng chỉ những người đã đăng nhập mới có thể truy cập danh sách sinh viên. Hàm `securityFilterChain` này giúp bạn đạt được điều đó bằng cách yêu cầu tất cả các yêu cầu HTTP đều phải được xác thực trước khi xử lý.
+3. **http.authorizeHttpRequests(...)**:
+    - Phần này cấu hình các quy tắc quyền truy cập cho các yêu cầu HTTP.
+
+    - **configurer -> configurer.requestMatchers("/public/**").permitAll()**:
+        - Các yêu cầu đến URL bắt đầu bằng `/public/` sẽ được phép truy cập mà không cần xác thực (không cần đăng nhập).
+
+    - **configurer.requestMatchers("/admin/**").hasRole("ADMIN")**:
+        - Các yêu cầu đến URL bắt đầu bằng `/admin/` yêu cầu người dùng phải có vai trò `ADMIN`.
+
+    - **configurer.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")**:
+        - Các yêu cầu đến URL bắt đầu bằng `/manager/` yêu cầu người dùng có ít nhất một trong các vai trò `ADMIN` hoặc `MANAGER`.
+
+    - **configurer.requestMatchers("/teacher/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")**:
+        - Các yêu cầu đến URL bắt đầu bằng `/teacher/` yêu cầu người dùng có ít nhất một trong các vai trò `ADMIN`, `MANAGER`, hoặc `TEACHER`.
+
+    - **configurer.anyRequest().permitAll()**:
+        - Bất kỳ yêu cầu nào không khớp với các mẫu trước đó sẽ được phép truy cập mà không cần xác thực.
+
+4. **.formLogin(...)**:
+    - Cấu hình cho đăng nhập.
+
+    - **form -> form.loginPage("/showLoginPage")**:
+        - Cung cấp URL của trang đăng nhập tùy chỉnh.
+
+    - **form.loginProcessingUrl("/authenticateTheUser")**:
+        - URL mà trình duyệt sẽ gửi thông tin đăng nhập đến (thường là phương thức POST).
+
+    - **form.defaultSuccessUrl("/home", true)**:
+        - URL sẽ được chuyển hướng đến sau khi đăng nhập thành công. `true` cho phép chuyển hướng đến trang này ngay cả khi người dùng đã đăng nhập trước đó.
+
+    - **form.permitAll()**:
+        - Cho phép tất cả người dùng (kể cả những người chưa đăng nhập) truy cập trang đăng nhập.
+
+5. **.logout(...)**:
+    - Cấu hình cho chức năng đăng xuất.
+
+    - **logout -> logout.permitAll()**:
+        - Cho phép tất cả người dùng truy cập vào chức năng đăng xuất mà không cần xác thực.
+
+6. **.exceptionHandling(...)**:
+    - Cấu hình xử lý lỗi.
+
+    - **configurer -> configurer.accessDeniedPage("/showPage403")**:
+        - Cung cấp URL của trang sẽ được hiển thị khi người dùng không có quyền truy cập vào tài nguyên (403 Forbidden).
+
+7. **return http.build()**:
+    - Xây dựng và trả về đối tượng `SecurityFilterChain` đã cấu hình từ `HttpSecurity`.
+
+### Tóm tắt:
+
+- Hàm `securityFilterChain` cấu hình bảo mật cho ứng dụng web bằng cách xác định quyền truy cập cho các URL khác nhau.
+- Nó cũng cấu hình trang đăng nhập, trang đăng xuất và xử lý lỗi cho ứng dụng.
+- Điều này giúp bảo vệ các tài nguyên của ứng dụng và xác thực người dùng.
