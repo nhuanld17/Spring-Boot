@@ -21,6 +21,7 @@ public class MySecurity {
 		return jdbcUserDetailsManager;
 	}
 	
+	// Đọc doc để hiểu thêm phần này
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(

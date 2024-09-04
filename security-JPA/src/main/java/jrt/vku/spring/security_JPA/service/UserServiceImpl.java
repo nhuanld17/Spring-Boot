@@ -1,7 +1,6 @@
 package jrt.vku.spring.security_JPA.service;
 
 
-import jakarta.annotation.PostConstruct;
 import jrt.vku.spring.security_JPA.dao.RoleRepository;
 import jrt.vku.spring.security_JPA.dao.UserRepository;
 import jrt.vku.spring.security_JPA.entity.Role;
@@ -13,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 @Service
