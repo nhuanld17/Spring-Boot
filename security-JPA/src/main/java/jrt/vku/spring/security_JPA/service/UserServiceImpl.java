@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService{
 	public User findByUsername(String userName) {
 		return userRepository.findByUsername(userName);
 	}
+	
+	@Override
+	public void saveUser(User user) {
+		userRepository.save(user);
+	}
 
 // Cái này tạo khi vừa mới chạy chương trình đề thêm data vào
 // khi có data mẫu r thì comment
