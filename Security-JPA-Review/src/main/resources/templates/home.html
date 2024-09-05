@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Hệ thông quản lí sinh viên</h3>
+                <h4>Trang chủ</h4>
+            </div>
+
+            <div class="col-sm-6">
+                Xin chào <b><span sec:authentication="principal.username"></span></b>
+                <span sec:authentication="principal.authorities"></span>
+
+                <form action="#" th:action="@{/logout}" method="post">
+                    <input type="submit" class="btn btn-info" value="Sign Out">
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <button sec:authorize="hasAnyRole('ADMIN','MANAGER','TEACHER')" class="btn btn-success">DETAILS</button>
+        <button sec:authorize="hasAnyRole('ADMIN','MANAGER')" class="btn btn-warning">EDIT</button>
+        <button sec:authorize="hasRole('ADMIN')" class="btn btn-danger">DELETE</button>
+        <div sec:authorize="hasRole('ADMIN')">
+            Đoạn văn bản này chỉ có user quyền admin mới có thể nhìn thấy
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>
