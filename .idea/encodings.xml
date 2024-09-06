@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/CRUD-API-DEMO/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CRUD-JPQL-DEMO/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CUSTOM-USER-TABLE/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JPQL-Demo/Create-Hibernate-JPA-Project/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MVC-CRUD-DEMO/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MVC-SECURITY/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MavenDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MavenDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Path-Variable-Demo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Scan-Component-Demo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/helloworld/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mvcsecurity/mvcsecurity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/security-JPA/src/main/java" charset="UTF-8" />
+  </component>
+</project>

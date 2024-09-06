@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="MavenDemo" />
+        <module name="helloworld" />
+        <module name="CRUD-API-DEMO" />
+        <module name="CRUD-JPQL-DEMO" />
+        <module name="CRUD-API-DEMO (1)" />
+        <module name="Constructor-Injection-Demo" />
+        <module name="Create-Hibernate-JPA-Project" />
+        <module name="MVC-CRUD-DEMO" />
+        <module name="MVC-SECURITY" />
+        <module name="RestController-And-Check-By-PostMan-Demo" />
+        <module name="mvcsecurity" />
+        <module name="Security-JPA" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CRUD-API-DEMO" options="-parameters" />
+      <module name="CRUD-API-DEMO (1)" options="-parameters" />
+      <module name="CRUD-JPQL-DEMO" options="-parameters" />
+      <module name="Constructor-Injection-Demo" options="-parameters" />
+      <module name="Create-Hibernate-JPA-Project" options="-parameters" />
+      <module name="MVC-CRUD-DEMO" options="-parameters" />
+      <module name="MVC-SECURITY" options="-parameters" />
+      <module name="RestController-And-Check-By-PostMan-Demo" options="-parameters" />
+      <module name="Security-JPA" options="-parameters" />
+      <module name="helloworld" options="-parameters" />
+      <module name="mvcsecurity" options="-parameters" />
+    </option>
+  </component>
+</project>

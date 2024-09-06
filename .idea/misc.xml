@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/JPQL-Demo/Create-Hibernate-JPA-Project/pom.xml" />
+        <option value="$PROJECT_DIR$/MavenDemo/pom.xml" />
+        <option value="$PROJECT_DIR$/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/mvcsecurity/mvcsecurity/pom.xml" />
+        <option value="$PROJECT_DIR$/MVC-SECURITY/pom.xml" />
+        <option value="$PROJECT_DIR$/security-JPA/pom.xml" />
+        <option value="$PROJECT_DIR$/CRUD-API-DEMO/pom.xml" />
+        <option value="$PROJECT_DIR$/MVC-CRUD-DEMO/pom.xml" />
+        <option value="$PROJECT_DIR$/CRUD-JPQL-DEMO/pom.xml" />
+        <option value="$PROJECT_DIR$/CUSTOM-USER-TABLE/pom.xml" />
+        <option value="$PROJECT_DIR$/Path-Variable-Demo/pom.xml" />
+        <option value="$PROJECT_DIR$/Scan-Component-Demo/pom.xml" />
+        <option value="$PROJECT_DIR$/Security-JPA-Review/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="openjdk-22" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

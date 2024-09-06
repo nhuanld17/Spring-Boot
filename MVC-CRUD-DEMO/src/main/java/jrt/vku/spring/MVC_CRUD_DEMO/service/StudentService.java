@@ -2,7 +2,6 @@ package jrt.vku.spring.MVC_CRUD_DEMO.service;
 
 import jrt.vku.spring.MVC_CRUD_DEMO.entity.Student;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
