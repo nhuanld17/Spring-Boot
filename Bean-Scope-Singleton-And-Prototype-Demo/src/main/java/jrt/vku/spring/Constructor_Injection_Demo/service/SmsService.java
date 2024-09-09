@@ -4,6 +4,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SmsService implements MessageService{
+    
+    public SmsService() {
+        System.out.println("SmsService constructor");
+    }
+    
     @Override
     public String sendMessage() {
         return "SMS Sending ...";

@@ -20,6 +20,6 @@ public class NotificationController {
     public String sendEmail() {
         return this.service.sendMessage();
     }
-
-
+    
+    
 }

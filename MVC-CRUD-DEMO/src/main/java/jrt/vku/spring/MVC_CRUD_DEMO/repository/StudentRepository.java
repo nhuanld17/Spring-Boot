@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 	// Phương thức tìm kiếm tất cả các user với phân trang
-	
 	@Override
 	Page<Student> findAll(Pageable pageable);
 }

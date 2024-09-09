@@ -88,6 +88,7 @@ public class StudentController {
 	// Thì bây giờ ta bắt Exception thôi là được rồi
 	// Và thay NOT_FOUND = BAD_REQUEST, vì chúng ta đang bắt lỗi truyền
 	// vào 1 chuỗi thay vì 1 số
+	// Muốn hàm này hoạt động thì cmt catchError() lại r chạy chương trình
 	@ExceptionHandler
 	public ResponseEntity<ErrorRespone> catchAllError(Exception exception){
 		ErrorRespone errorRespone = new ErrorRespone(HttpStatus.BAD_REQUEST.value(),exception.getMessage());

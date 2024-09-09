@@ -22,14 +22,14 @@ public class GlobalExceptionHandler {
 //		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRespone);
 //	}
 	
-	@ExceptionHandler
+	@ExceptionHandler(StudentException.class)
 	public ResponseEntity<ErrorRespone> catchError(StudentException exception){
 		ErrorRespone errorRespone = new ErrorRespone(HttpStatus.NOT_FOUND.value(),exception.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorRespone);
 	}
 	
 	
-	@ExceptionHandler
+	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorRespone> catchAllError(Exception exception){
 		ErrorRespone errorRespone = new ErrorRespone(HttpStatus.NOT_FOUND.value(),exception.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorRespone);

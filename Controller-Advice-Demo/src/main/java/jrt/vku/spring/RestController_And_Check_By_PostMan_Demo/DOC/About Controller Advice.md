@@ -1,120 +1,110 @@
-`@ControllerAdvice` là một annotation trong Spring Framework được sử dụng để cung cấp một cách toàn cục để xử lý các ngoại lệ, chỉnh sửa dữ liệu phản hồi, và thực hiện các tác vụ trước và sau khi các phương thức xử lý yêu cầu được gọi. Đây là một cách tiện lợi để xử lý các trường hợp lỗi và cung cấp phản hồi tùy chỉnh cho toàn bộ ứng dụng.
+### `@ControllerAdvice` trong Spring Boot
 
-### **Giải Thích**
+**`@ControllerAdvice`** là một annotation trong Spring Boot được sử dụng để xử lý **ngoại lệ toàn cục** (global exception handling) và cung cấp lời khuyên (advice) chung cho tất cả các controller trong ứng dụng. Thay vì phải xử lý ngoại lệ trong từng controller riêng lẻ, ta có thể dùng `@ControllerAdvice` để viết một lớp xử lý ngoại lệ chung cho toàn bộ ứng dụng, giúp mã trở nên ngắn gọn và dễ bảo trì hơn.
 
-1. **Xử Lý Ngoại Lệ Toàn Cục**: Bạn có thể định nghĩa các phương thức để xử lý các loại ngoại lệ cụ thể hoặc chung. Khi một ngoại lệ xảy ra trong bất kỳ `@Controller` nào, các phương thức trong lớp `@ControllerAdvice` sẽ được gọi để xử lý ngoại lệ đó.
+### Các chức năng chính của `@ControllerAdvice`
 
-2. **Chỉnh Sửa Dữ Liệu Phản Hồi**: `@ControllerAdvice` cho phép bạn thay đổi hoặc làm phong phú thêm dữ liệu phản hồi từ các `@Controller` trước khi trả về cho client.
+1. **Global Exception Handling**: Xử lý tất cả các ngoại lệ phát sinh trong controller ở một nơi duy nhất.
+2. **Binding và Validation Advice**: Có thể sử dụng để xử lý các lỗi liên quan đến ràng buộc (binding) và kiểm tra hợp lệ (validation) dữ liệu.
+3. **Model Advice**: Cung cấp dữ liệu chung cho các view mà không cần phải khai báo trong từng controller.
 
-3. **Thực Hiện Các Tác Vụ Trước và Sau Khi Xử Lý Yêu Cầu**: Bạn có thể sử dụng `@ControllerAdvice` để thực hiện các hành động như ghi log, thay đổi dữ liệu hoặc xử lý các điều kiện trước khi gửi phản hồi.
+### Cách hoạt động
 
-### **Ví Dụ Thực Tế**
+- Khi một ngoại lệ xảy ra trong bất kỳ controller nào, Spring sẽ tìm kiếm các phương thức có đánh dấu annotation **`@ExceptionHandler`** trong lớp được đánh dấu bằng `@ControllerAdvice`. Những phương thức này sẽ được gọi để xử lý ngoại lệ thay vì để controller tự xử lý.
 
-Dưới đây là một ví dụ về cách sử dụng `@ControllerAdvice` để xử lý ngoại lệ toàn cục trong một ứng dụng Spring Boot.
+### Ví dụ về `@ControllerAdvice` xử lý ngoại lệ
 
-#### **1. Định Nghĩa Lớp Ngoại Lệ**
+#### 1. Tạo một lớp `ControllerAdvice` để xử lý ngoại lệ toàn cục
 
 ```java
-package com.example.demo.exception;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    // Xử lý ngoại lệ khi không tìm thấy đối tượng (ví dụ: sinh viên không tồn tại)
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<String> handleStudentNotFoundException(StudentNotFoundException ex) {
+        return new ResponseEntity<>("Student not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    // Xử lý ngoại lệ tổng quát
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGeneralException(Exception ex) {
+        return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+```
+
+#### 2. Định nghĩa một ngoại lệ tùy chỉnh `StudentNotFoundException`
+
+```java
+public class StudentNotFoundException extends RuntimeException {
+    public StudentNotFoundException(String message) {
         super(message);
     }
 }
 ```
 
-#### **2. Định Nghĩa Lớp `@ControllerAdvice`**
+#### 3. Sử dụng ngoại lệ trong Controller
 
 ```java
-package com.example.demo.advice;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.entity.ErrorResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-@ControllerAdvice
-public class GlobalExceptionHandler {
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-}
-```
-
-#### **3. Định Nghĩa Lớp Phản Hồi Lỗi**
-
-```java
-package com.example.demo.entity;
-
-public class ErrorResponse {
-    private int status;
-    private String message;
-
-    public ErrorResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
-
-    // Getters and Setters
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-}
-```
-
-#### **4. Định Nghĩa `@RestController`**
-
-```java
-package com.example.demo.controller;
-
-import com.example.demo.exception.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class ExampleController {
+@RequestMapping("/students")
+public class StudentController {
 
-    @GetMapping("/resource/{id}")
-    public String getResourceById(@PathVariable int id) {
-        if (id < 1 || id > 10) { // Giả sử id từ 1 đến 10 là hợp lệ
-            throw new ResourceNotFoundException("Resource with id " + id + " not found");
-        }
-        return "Resource with id " + id;
+    private List<Student> students = new ArrayList<>();
+
+    // Lấy sinh viên theo ID, nếu không tồn tại thì ném ngoại lệ
+    @GetMapping("/{id}")
+    public Student getStudentById(@PathVariable int id) {
+        return students.stream()
+                .filter(student -> student.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found"));
     }
 }
 ```
 
-### **Giải Thích**
+### Giải thích chi tiết:
 
-- **`@ControllerAdvice`**: Được gán cho lớp `GlobalExceptionHandler`, cho phép xử lý ngoại lệ toàn cục. Khi một ngoại lệ kiểu `ResourceNotFoundException` được ném ra, phương thức `handleResourceNotFoundException` sẽ được gọi.
+1. **`@ControllerAdvice`**: Annotation này giúp khai báo một lớp xử lý ngoại lệ toàn cục. Khi có ngoại lệ xảy ra ở bất kỳ controller nào, các phương thức trong lớp này sẽ được gọi để xử lý ngoại lệ.
 
-- **`@ExceptionHandler`**: Được sử dụng để chỉ định phương thức xử lý các ngoại lệ của kiểu `ResourceNotFoundException`.
+2. **`@ExceptionHandler(StudentNotFoundException.class)`**: Annotation này chỉ định rằng phương thức **`handleStudentNotFoundException`** sẽ xử lý ngoại lệ `StudentNotFoundException`. Khi ngoại lệ này bị ném (thrown) ra từ bất kỳ controller nào, phương thức này sẽ được gọi để trả về phản hồi thích hợp.
 
-- **`ErrorResponse`**: Được sử dụng để định dạng dữ liệu phản hồi lỗi, bao gồm mã trạng thái và thông báo lỗi.
+3. **Phương thức xử lý ngoại lệ tổng quát**:
+    - **`@ExceptionHandler(Exception.class)`**: Đây là phương thức xử lý ngoại lệ tổng quát. Nó sẽ xử lý mọi ngoại lệ khác mà không có ngoại lệ tùy chỉnh nào bắt được. Ví dụ: nếu một ngoại lệ bất kỳ như `NullPointerException` xảy ra, phương thức này sẽ được gọi.
 
-- **`ExampleController`**: Đây là lớp xử lý các yêu cầu API. Nếu `id` không hợp lệ, nó sẽ ném ra `ResourceNotFoundException`, và ngoại lệ này sẽ được xử lý bởi `GlobalExceptionHandler`.
+4. **Trả về HTTP status code**:
+    - Trong ví dụ này, ngoại lệ `StudentNotFoundException` trả về mã trạng thái `404 NOT FOUND` thông qua `ResponseEntity`. Điều này giúp API trả về thông tin lỗi chi tiết cùng với mã trạng thái thích hợp.
+    - Ngoại lệ tổng quát sẽ trả về `500 INTERNAL SERVER ERROR` để biểu thị lỗi máy chủ nội bộ.
 
-### **Kết Luận**
+#### 4. Ví dụ về phản hồi khi xảy ra ngoại lệ
 
-Sử dụng `@ControllerAdvice` giúp bạn quản lý các lỗi và phản hồi một cách đồng bộ và hiệu quả trong toàn bộ ứng dụng Spring Boot của bạn. Bạn có thể xử lý lỗi, chỉnh sửa dữ liệu phản hồi, và thực hiện các tác vụ bổ sung một cách tập trung và dễ dàng duy trì.
+- **Yêu cầu**: `GET /students/1`
+- **Trường hợp sinh viên không tồn tại**:
+    - Phản hồi trả về:
+   ```json
+   {
+     "status": 404,
+     "error": "Student not found: Student with ID 1 not found"
+   }
+   ```
+- **Trường hợp lỗi tổng quát**:
+    - Nếu có một lỗi nào khác xảy ra, phương thức xử lý tổng quát sẽ trả về mã `500` kèm theo thông báo lỗi chung.
+
+### Kết luận:
+
+- **`@ControllerAdvice`** là công cụ mạnh mẽ trong Spring Boot, giúp xử lý ngoại lệ một cách tập trung và dễ dàng. Thay vì xử lý từng ngoại lệ trong từng controller, ta có thể sử dụng một lớp duy nhất để xử lý toàn bộ ngoại lệ của ứng dụng.
+- Nó giúp mã nguồn trở nên ngắn gọn, dễ quản lý và giúp phản hồi lỗi từ API được chuẩn hóa với các mã trạng thái HTTP thích hợp.
+- `@ControllerAdvice` còn có thể được sử dụng để xử lý các vấn đề về kiểm tra dữ liệu (validation), dữ liệu truyền vào không hợp lệ, hoặc các lỗi liên quan đến binding dữ liệu.
+
