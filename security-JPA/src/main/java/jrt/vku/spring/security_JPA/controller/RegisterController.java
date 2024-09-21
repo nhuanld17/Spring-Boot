@@ -12,7 +12,6 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +33,7 @@ public class RegisterController {
 	
 	@GetMapping("/showRegisterForm")
 	public String showRegisterForm(Model model) {
+		// Tạo 1 RegisterUser rỗng truyền vào model để gửi tới form đăng kí
 		RegisterUser registerUser = new RegisterUser();
 		model.addAttribute("registerUser", registerUser);
 		return "register/form";
