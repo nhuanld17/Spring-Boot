@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+</head>
+<body>
+<h1>Giỏ hàng của bạn</h1>
+<ul>
+    <th:block th:each="item : ${cart}">
+        <li th:text="${item}"></li>
+    </th:block>
+</ul>
+
+<!-- Form để thêm sản phẩm vào giỏ hàng -->
+<form th:action="@{/cart/add}" method="post">
+    <input type="text" name="product" placeholder="Nhập tên sản phẩm">
+    <button type="submit">Thêm vào giỏ hàng</button>
+</form>
+
+<!-- Liên kết để xóa giỏ hàng -->
+<a th:href="@{/cart/clear}">Xóa giỏ hàng</a>
+</body>
+</html>
