@@ -1,7 +1,9 @@
 package jrt.vku.spring.security_JPA.web;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class RegisterUser {
 	@NotBlank(message = "Thông tin bắt buộc")
