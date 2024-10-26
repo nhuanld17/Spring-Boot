@@ -1,6 +1,5 @@
 package com.example.Jpa_Specification;
 
-import com.example.Jpa_Specification.model.User;
 import com.example.Jpa_Specification.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
