@@ -23,7 +23,6 @@ public class UserController {
 		UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
 		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
 		Matcher matcher = pattern.matcher(search+",");
-		String[] searchParams = search.split(",");
 		
 		while (matcher.find()) {
 			builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
